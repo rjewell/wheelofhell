@@ -52,18 +52,29 @@
 
         let resultDisplay = document.getElementById('resultDisplay');
         let duration = 12000;  // 12 seconds
-        let intervalTime = 100;  // Start flipping at 10 items per second (100ms)
+        let startTime = Date.now();
+        let intervalTime = 100;  // Start at 10 items per second (100ms)
 
-        let index = 0;
-        const interval = setInterval(function() {
-            resultDisplay.textContent = items[index];
-            index = (index + 1) % items.length;
-            intervalTime += 10;  // Gradually slow down
-            if (intervalTime > duration) {
-                clearInterval(interval);
+        function animatePicker() {
+            let elapsed = Date.now() - startTime;
+            
+            if (elapsed >= duration) {
                 resultDisplay.textContent = items[Math.floor(Math.random() * items.length)];
+                return;
             }
-        }, intervalTime);
+
+            // Display a random item
+            resultDisplay.textContent = items[Math.floor(Math.random() * items.length)];
+
+            // Gradually increase the interval time to slow down
+            intervalTime += 10;
+
+            // Continue the loop with the updated interval time
+            setTimeout(animatePicker, intervalTime);
+        }
+
+        // Start the randomization
+        animatePicker();
     });
 </script>
 
