@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Item Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        textarea {
+            width: 300px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <textarea id="textInput" placeholder="Enter your items, one per line"></textarea>
+    <br>
+    <button id="goButton">Go</button>
+    <div class="result" id="resultDisplay"></div>
+</div>
+
+<script>
+    document.getElementById('goButton').addEventListener('click', function() {
+        const textInput = document.getElementById('textInput').value.trim();
+        if (!textInput) return;
+
+        const items = textInput.split('\n').map(item => item.trim()).filter(item => item);
+        if (items.length === 0) return;
+
+        let resultDisplay = document.getElementById('resultDisplay');
+        let duration = 12000;  // 12 seconds
+        let intervalTime = 100;  // Start flipping at 10 items per second (100ms)
+
+        let index = 0;
+        const interval = setInterval(function() {
+            resultDisplay.textContent = items[index];
+            index = (index + 1) % items.length;
+            intervalTime += 10;  // Gradually slow down
+            if (intervalTime > duration) {
+                clearInterval(interval);
+                resultDisplay.textContent = items[Math.floor(Math.random() * items.length)];
+            }
+        }, intervalTime);
+    });
+</script>
+
+</body>
+</html>
